@@ -210,8 +210,8 @@ C:\Users\Xela\Downloads\moses191006\A\20191004\JT13-0999_04-10-2019_02.54.11.raw
             fileListText = @"C:\Users\Xela\Downloads\jason 191023\1-AM-L-0004_23-10-2019_01.58.23.raw";
             GainPath = @"C:\Users\Xela\Downloads\jason 191023\GainScanFile_21-10-2019_01.10.23.raw";
 
-            //fileListText = @"C:\Users\Xela\Downloads\jason 191023\1-AML-0001_23-10-2019_11.10.11.raw";//dw
-            //GainPath = @"C:\Users\Xela\Downloads\191023105442.raw";
+            fileListText = @"C:\Users\Xela\Downloads\jason 191023\1-AML-0001_23-10-2019_11.10.11.raw";//dw
+            GainPath = @"C:\Users\Xela\Downloads\191023105442.raw";
 
             var fileList = fileListText.Split('\n').Select(sx => sx.Trim()).ToList();
             if (args.Count() >= 2)
