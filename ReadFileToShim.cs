@@ -12,7 +12,7 @@ namespace RawImageShimmer
         const string FilePath = "1024_16bit_Output.raw";
         const string HostInterfaceIP = "0.0.0.0";
         const int TransmitDataHostPortDefault = StreamDataListener.DetectorDataPortDefault + 565;
-        const string DetectorDataIpDefault = "192.168.184.160";
+        const string DetectorDataIpDefault = "192.168.184.3";
         static byte[] HeaderBuf = new byte[1024];
         public static async Task<long> CopyRawImageFileToShim(string FilePath,
             string DetectorIpAddr = DetectorDataIpDefault,

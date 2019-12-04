@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace RawImageShimmer
 {
@@ -144,7 +146,20 @@ namespace RawImageShimmer
         //        textBox1.Text = fPick.FileName;
         //    }
         //}
-        static string GainOnJson = @"{
+        //static FormattableString 
+        static string FocusShift = @"{
+  ""DConVersion"": 3,
+  ""Target"": ""shim"",
+  ""Caller"": ""stanley-aquisition"",
+  ""Command"": ""set_dw_shift"",
+  ""ReceiptRequested"": false,
+  ""CallerCommandIndex"": 0,
+  ""Args"": [
+    ""x_shift"",
+    ""y_shift""
+  ]
+}";
+    static string GainOnJson = @"{
   ""DConVersion"": 3,
   ""Target"": ""shim"",
   ""Caller"": ""stanley-aquisition"",
@@ -171,6 +186,20 @@ namespace RawImageShimmer
   ""Valid"": true,
   ""CommandOk"": true,
   ""result"": ""filter_level = 2""
+}";
+        static string BltFilterCorOnJson = @"{
+  ""DConVersion"": 3,
+  ""Target"": ""shim"",
+  ""Caller"": ""stanley-aquisition"",
+  ""Command"": ""set_filter_level"",
+  ""ReceiptRequested"": false,
+  ""CallerCommandIndex"": 0,
+  ""Args"": [
+    ""3""
+  ],
+  ""Valid"": true,
+  ""CommandOk"": true,
+  ""result"": ""filter_level = 3""
 }";
 
         static async Task Main(string[] args)
@@ -213,6 +242,45 @@ C:\Users\Xela\Downloads\moses191006\A\20191004\JT13-0999_04-10-2019_02.54.11.raw
             fileListText = @"C:\Users\Xela\Downloads\jason 191023\1-AML-0001_23-10-2019_11.10.11.raw";//dw
             GainPath = @"C:\Users\Xela\Downloads\191023105442.raw";
 
+            fileListText = @"H:\butting_1911\butting raw files\191105031958.raw";// 191105032428.raw";// 191105031640.raw";//dw
+            GainPath = @"H:\butting_1911\butting raw files\191105030424g.raw";// 191105030031g.raw";
+
+            //fileListText = @"C:\tmp\Jason\shim191106\1-A-ML-0001_06-11-2019_09.35.13.raw";//dw
+            //GainPath = @"C:\tmp\Jason\shim191106\GainScanFile_06-11-2019_09.17.36.raw";
+
+            fileListText = @"C:\Users\Xela\Downloads\wetransfer-7adb80\PROC-0001_19-11-2019_04.40.14.raw";
+            GainPath = @"C:\Users\Xela\Downloads\wetransfer-7adb80\36x762(1).raw";
+
+            fileListText = @"H:\ProjectData\Stanley\wetransfer-3b040c\PROC-0002_21-11-2019_12.19.15.raw
+H:\ProjectData\Stanley\wetransfer-3b040c\PROC-0003_21-11-2019_03.46.06.raw
+H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_19-11-2019_04.40.14.raw
+H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.34.raw";
+
+            //named variable replace
+            var fileListTest = new List<(string, string)>() {
+                (@"H:\ProjectData\Stanley\wetransfer-3b040c\PROC-0002_21-11-2019_12.19.15.raw",@"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X762(2)\36X762(2).raw"),
+                (@"H:\ProjectData\Stanley\wetransfer-3b040c\PROC-0003_21-11-2019_03.46.06.raw",@"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X762(2)\36X762(2).raw"),
+                (@"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_19-11-2019_04.40.14.raw",@"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X762(2)\36X762(2).raw"),
+                (@"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.34.raw",@"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X762(2)\36X762(2).raw"),
+                };
+
+
+            fileListText = @"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_19-11-2019_04.40.14.raw";   
+            fileListText = @"H:\ProjectData\Stanley\wetransfer-3b040c\PROC-0002_21-11-2019_12.19.15.raw";
+            GainPath = @"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X762(2)\36X762(2).raw";
+            //GainPath = @"H:\ProjectData\Stanley\wetransfer-3b040c\36X635\36X635.raw";
+            //GainPath = @"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X529B\36X529B.raw";
+            //GainPath = @"H:\ProjectData\Stanley\wetransfer-7adb80\36x762(1).raw";
+
+            fileListText = @"C:\tmp\MistrasGianCor.raw";
+
+            fileListText = @"C:\tmp\Jason\1-A-ML-002_03-12-2019_11.47.38.raw";
+            GainPath = @"C:\tmp\Jason\24x375_JM_1203_No filter.raw";
+
+            fileListText = @"C:\tmp\Jason\sw\1AML-001_04-12-2019_10.40.31.raw";
+            GainPath = @"C:\tmp\Jason\sw\20x250_JBARN.raw";//GainScanFile_04-12-2019_10.35.19.raw";
+            //GainPath = @"C:\tmp\Jason\sw\GainScanFile_04-12-2019_10.35.19.raw";
+
             var fileList = fileListText.Split('\n').Select(sx => sx.Trim()).ToList();
             if (args.Count() >= 2)
             {
@@ -233,11 +301,19 @@ C:\Users\Xela\Downloads\moses191006\A\20191004\JT13-0999_04-10-2019_02.54.11.raw
 
 
             string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { GainPath });
-            //            string txt4 = IpcEnvelope.SendJsonForReply(GainOnJson);
-            string txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson);
-            Console.WriteLine(sx);
-            Console.WriteLine(ipcString);
-            Console.WriteLine(txt3);
+            string txt4 = IpcEnvelope.SendJsonForReply(GainOnJson);
+            txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson);
+            //txt4 = IpcEnvelope.SendJsonForReply(BltFilterCorOnJson);
+            //Console.WriteLine(txt3);
+            //Console.WriteLine(ipcString);
+            //Console.WriteLine(txt4);
+            int x_shift = -2;
+            int y_shift = 2;
+            var IpcFocus = FocusShift.Replace(nameof(x_shift), x_shift.ToString(CultureInfo.InvariantCulture))
+                .Replace(nameof(y_shift), y_shift.ToString(CultureInfo.InvariantCulture));
+            string txt5 = IpcEnvelope.SendJsonForReply(IpcFocus);
+            Console.WriteLine(txt5);
+
             Task.Delay(3000).Wait();
             //     wh.Set();
             Task.Delay(1000).Wait();
