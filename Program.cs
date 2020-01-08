@@ -281,6 +281,12 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             GainPath = @"C:\tmp\Jason\sw\20x250_JBARN.raw";//GainScanFile_04-12-2019_10.35.19.raw";
             //GainPath = @"C:\tmp\Jason\sw\GainScanFile_04-12-2019_10.35.19.raw";
 
+            fileListText = @"C:\tmp\ACC-20-2nd.raw";// ACC12.raw";
+            fileListText = @"C:\tmp\ACC-20-2nd.raw";// ACC12.raw";
+            fileListText = @"C:\tmp\LineGain.raw";// ACC12.raw";
+            fileListText = @"C:\tmp\NoGain.raw";// ACC12.raw";
+            GainPath = @"C:\tmp\Flat.raw";
+
             var fileList = fileListText.Split('\n').Select(sx => sx.Trim()).ToList();
             if (args.Count() >= 2)
             {
