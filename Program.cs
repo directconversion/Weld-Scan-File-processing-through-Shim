@@ -159,7 +159,21 @@ namespace RawImageShimmer
     ""y_shift""
   ]
 }";
-    static string GainOnJson = @"{
+        static string OnlyDeliverJson = @"{
+  ""DConVersion"": 3,
+  ""Target"": ""shim"",
+  ""Caller"": ""stanley-aquisition"",
+  ""Command"": ""set_filter_level"",
+  ""ReceiptRequested"": false,
+  ""CallerCommandIndex"": 0,
+  ""Args"": [
+    ""0""
+  ],
+  ""Valid"": true,
+  ""CommandOk"": true,
+  ""result"": ""filter_level = 0""
+}";
+        static string GainOnJson = @"{
   ""DConVersion"": 3,
   ""Target"": ""shim"",
   ""Caller"": ""stanley-aquisition"",
@@ -287,6 +301,12 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             fileListText = @"C:\tmp\NoGain.raw";// ACC12.raw";
             GainPath = @"C:\tmp\Flat.raw";
 
+            fileListText = @"C:\tmp\Jason\TileLineExample200417\PHP SP5-00036_17-04-2020_10.17.09.raw";
+            GainPath = @"C:\tmp\Jason\TileLineExample200417\GainScanFile_17-04-2020_09.19.33.raw";
+
+            fileListText = @"C:\tmp\ForMoses\20190620\SW-001_20-06-2019_03.12.03.raw";
+          GainPath = @"H:\ProjectData\Stanley\Jason\wetransfer-ab9748\GainScanFile_25-06-2019_11.07.34.raw";
+
             var fileList = fileListText.Split('\n').Select(sx => sx.Trim()).ToList();
             if (args.Count() >= 2)
             {
@@ -307,14 +327,15 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
 
 
             string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { GainPath });
-            string txt4 = IpcEnvelope.SendJsonForReply(GainOnJson);
+            string txt4 = IpcEnvelope.SendJsonForReply(OnlyDeliverJson);
+            //txt4 = IpcEnvelope.SendJsonForReply(GainOnJson);
             txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson);
             //txt4 = IpcEnvelope.SendJsonForReply(BltFilterCorOnJson);
             //Console.WriteLine(txt3);
             //Console.WriteLine(ipcString);
             //Console.WriteLine(txt4);
-            int x_shift = -2;
-            int y_shift = 2;
+            int x_shift = -1;
+            int y_shift = +0;
             var IpcFocus = FocusShift.Replace(nameof(x_shift), x_shift.ToString(CultureInfo.InvariantCulture))
                 .Replace(nameof(y_shift), y_shift.ToString(CultureInfo.InvariantCulture));
             string txt5 = IpcEnvelope.SendJsonForReply(IpcFocus);
