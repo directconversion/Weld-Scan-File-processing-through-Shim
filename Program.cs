@@ -17,27 +17,29 @@ namespace RawImageShimmer
     class Program
     {
         //We need some Channels !
-        const int UdpPort = 0x4153;
-        public static readonly IPEndPoint LocalIpEndPointLoopback = new IPEndPoint(IPAddress.Loopback, UdpPort);
-        void funcList()
-        {
-            int level = 0;
-            int mode = 0;
-            int xShift = 0;
-            int yShift = 0;
-            string fileName = "";
-            var txt0 = IpcEnvelope.SendCmdAndAwaitReply("set_filter_level", new string[] { $"{level}" });
-            var txt2 = IpcEnvelope.SendCmdAndAwaitReply("set_dw_mode", new string[] { $"{mode}" });
-            string txt1 = IpcEnvelope.SendCmdAndAwaitReply("set_dw_shift", new string[] { $"{xShift}", $"{yShift}" });
-            string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { fileName });
-            string reply0 = IpcEnvelope.SendCmdAndAwaitReply("get_raw_last_filename", new string[0]);
-            IpcEnvelope.Cmd2JsonText("release_raw_file", new string[] { });
-            var txt = IpcEnvelope.SendCmdAndAwaitReply("release_raw_file", new string[] { });
-            var reptxt = IpcEnvelope.WaitForJsonReply();
-            //string fn = GetLastRawFilename();
-            //string reply1 = LoadGainFromRaw(fn);
-            //SendDwMode();
-        }
+        //const int UdpPort = 0x4153;
+
+        //public static readonly IPEndPoint LocalIpEndPointLoopback = new IPEndPoint(IPAddress.Loopback, UdpPort);
+        //void funcList()
+        //{
+        //    int level = 0;
+        //    int mode = 0;
+        //    int xShift = 0;
+        //    int yShift = 0;
+        //    string fileName = "";
+        //    //var endPoint =IPEndPoint.Parse()
+        //    var txt0 = IpcEnvelope.SendCmdAndAwaitReply("set_filter_level", new string[] { $"{level}" });
+        //    var txt2 = IpcEnvelope.SendCmdAndAwaitReply("set_dw_mode", new string[] { $"{mode}" });
+        //    string txt1 = IpcEnvelope.SendCmdAndAwaitReply("set_dw_shift", new string[] { $"{xShift}", $"{yShift}" });
+        //    string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { fileName });
+        //    string reply0 = IpcEnvelope.SendCmdAndAwaitReply("get_raw_last_filename", new string[0]);
+        //    IpcEnvelope.Cmd2JsonText("release_raw_file", new string[] { });
+        //    var txt = IpcEnvelope.SendCmdAndAwaitReply("release_raw_file", new string[] { });
+        //    //var reptxt = IpcEnvelope.WaitForJsonReply();
+        //    //string fn = GetLastRawFilename();
+        //    //string reply1 = LoadGainFromRaw(fn);
+        //    //SendDwMode();
+        //}
         static string CopyFile(string fn)
         {
             var defaultPath = @"C:/Xcounter/FlatField.txt";
@@ -117,16 +119,16 @@ namespace RawImageShimmer
         //        return reply;
         //    }
         //}
-        private void button3_Click(object sender, EventArgs e)
-        {
-            string msg = "Blah blah \nbad json";
-            byte[] DGram = Encoding.ASCII.GetBytes(msg);
-            using (UdpClient udpClient = new UdpClient())
-            {
-                udpClient.Connect(IpcEnvelope.LocalIpEndPointLoopback);
-                udpClient.Send(DGram, DGram.Length);//, LocalIpEndPointLoopback);
-            }
-        }
+        //private void button3_Click(object sender, EventArgs e)
+        //{
+        //    string msg = "Blah blah \nbad json";
+        //    byte[] DGram = Encoding.ASCII.GetBytes(msg);
+        //    using (UdpClient udpClient = new UdpClient())
+        //    {
+        //        udpClient.Connect(IpcEnvelope.LocalIpEndPointLoopback);
+        //        udpClient.Send(DGram, DGram.Length);//, LocalIpEndPointLoopback);
+        //    }
+        //}
 
         private void Button4_Click(object sender, EventArgs e)
         {
@@ -279,7 +281,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 };
 
 
-            fileListText = @"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_19-11-2019_04.40.14.raw";   
+            fileListText = @"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_19-11-2019_04.40.14.raw";
             fileListText = @"H:\ProjectData\Stanley\wetransfer-3b040c\PROC-0002_21-11-2019_12.19.15.raw";
             GainPath = @"H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\36X762(2)\36X762(2).raw";
             //GainPath = @"H:\ProjectData\Stanley\wetransfer-3b040c\36X635\36X635.raw";
@@ -305,7 +307,11 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             GainPath = @"C:\tmp\Jason\TileLineExample200417\GainScanFile_17-04-2020_09.19.33.raw";
 
             fileListText = @"C:\tmp\ForMoses\20190620\SW-001_20-06-2019_03.12.03.raw";
-          GainPath = @"H:\ProjectData\Stanley\Jason\wetransfer-ab9748\GainScanFile_25-06-2019_11.07.34.raw";
+            GainPath = @"H:\ProjectData\Stanley\Jason\wetransfer-ab9748\GainScanFile_25-06-2019_11.07.34.raw";
+
+            fileListText = @"C:\tmp\Moses20200724\MLS-0002-D_20-07-2020_09.09.08.raw";
+            //fileListText = @"C:\tmp\Moses20200724\MLS-0001-D_20-07-2020_08.49.26.raw";
+            GainPath = @"C:\tmp\Moses20200724\GainScanFile_19-07-2020_10.24.31.raw";
 
             var fileList = fileListText.Split('\n').Select(sx => sx.Trim()).ToList();
             if (args.Count() >= 2)
@@ -320,16 +326,22 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             //gainFileName = "191017123647.raw";
             //fn = "191017124101.raw";
 
+            const int UdpIpcPort = 0x4153;
+            const string DetectorIpAddr = "192.168.32.24";
+
+
             Console.WriteLine("Hello World!");
+            var udpIpcEndPoint = new IPEndPoint(IPAddress.Parse("192.168.32.24"), UdpIpcPort);
             var ipc = IpcEnvelope.MakeCmd("load_raw_gain_file", new string[] { GainPath });
             string sx = JsonSerializer.Serialize<IpcEnvelope>(ipc);
             string ipcString = IpcEnvelope.Cmd2JsonText("load_raw_gain_file", new string[] { GainPath });
 
-
-            string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { GainPath });
-            string txt4 = IpcEnvelope.SendJsonForReply(OnlyDeliverJson);
-            //txt4 = IpcEnvelope.SendJsonForReply(GainOnJson);
-            txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson);
+            string txt1 = IpcEnvelope.SendCmdAndAwaitReply("set_ip", new string[] { "192.168.32.16" }, udpIpcEndPoint);
+            string txt2 = IpcEnvelope.SendCmdAndAwaitReply("set_client_ip", new string[] { "192.168.32.16" }, udpIpcEndPoint);
+            string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { GainPath }, udpIpcEndPoint);
+            string txt4 = IpcEnvelope.SendJsonForReply(OnlyDeliverJson, udpIpcEndPoint);
+            txt4 = IpcEnvelope.SendJsonForReply(GainOnJson,udpIpcEndPoint);
+            //txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson, udpIpcEndPoint);
             //txt4 = IpcEnvelope.SendJsonForReply(BltFilterCorOnJson);
             //Console.WriteLine(txt3);
             //Console.WriteLine(ipcString);
@@ -338,7 +350,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             int y_shift = +0;
             var IpcFocus = FocusShift.Replace(nameof(x_shift), x_shift.ToString(CultureInfo.InvariantCulture))
                 .Replace(nameof(y_shift), y_shift.ToString(CultureInfo.InvariantCulture));
-            string txt5 = IpcEnvelope.SendJsonForReply(IpcFocus);
+            string txt5 = IpcEnvelope.SendJsonForReply(IpcFocus, udpIpcEndPoint);
             Console.WriteLine(txt5);
 
             Task.Delay(3000).Wait();
@@ -354,8 +366,8 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 string inputPath = fileList[i];
                 string fnBase = Path.GetFileNameWithoutExtension(inputPath);
                 string outputPath = $@"C:/tmp/a{i}.raw";
-                var sf = Task.Run(() => StreamDataListener.RunImageDataTcp($@"C:/tmp/{fnBase}.cor.raw", StreamDataListener.DetectorDataPortDefault));
-                var t = Task.Run(() => ReadFileToShim.CopyRawImageFileToShim(inputPath));
+                var sf = Task.Run(() => StreamDataListener.RunImageDataTcp($@"C:/tmp/{fnBase}.cor.raw", "192.168.32.16", StreamDataListener.DetectorDataPortDefault));
+                var t = Task.Run(() => ReadFileToShim.CopyRawImageFileToShim(inputPath, DetectorIpAddr));
                 // @"C:\XCounter\RawImages\1024_16bit_Output.raw");
                 Task.WaitAll(sf, t);
             }
@@ -384,8 +396,8 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
     }
     public class IpcEnvelope
     {
-        const int UdpPort = 0x4153;
-        public static readonly IPEndPoint LocalIpEndPointLoopback = new IPEndPoint(IPAddress.Loopback, UdpPort);
+        //const int UdpPort = 0x4153;
+        //public static readonly IPEndPoint LocalIpEndPointLoopbackOld = new IPEndPoint(IPAddress.Loopback, UdpPort);
 
         public int DConVersion { get; set; } = 3;
         public string Target { get; set; }
@@ -419,19 +431,19 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             ipc.Args = args.ToArray();
             return ipc;
         }
-        public static void SendJson(string json)
+        public static void SendJson(string json, IPEndPoint RemoteUdpEndPoint)
         {
             string msg = json.ToString();
             byte[] DGram = Encoding.ASCII.GetBytes(msg);
             using (UdpClient udpClient = new UdpClient())
             {
                 udpClient.ExclusiveAddressUse = false;
-                udpClient.Connect(LocalIpEndPointLoopback);
+                udpClient.Connect(RemoteUdpEndPoint);
                 udpClient.Send(DGram, DGram.Length);//, LocalIpEndPointLoopback);
             }
         }
 
-        public static string WaitForJsonReply()
+        public static string WaitForJsonReply(IPEndPoint RemoteUdpEndPoint)
         {
             try
             {
@@ -439,7 +451,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 {
                     udpClient.ExclusiveAddressUse = false;
                     udpClient.Client.ReceiveTimeout = 500;
-                    udpClient.Connect(LocalIpEndPointLoopback);
+                    udpClient.Connect(RemoteUdpEndPoint);
                     IPEndPoint host = default;
                     var data = udpClient.Receive(ref host);
                     var reply = Encoding.ASCII.GetString(data);
@@ -453,7 +465,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             }
         }
 
-        public static string SendJsonForReply(string json)
+        public static string SendJsonForReply(string json, IPEndPoint RemoteUdpEndPoint)
         {
             string msg = json.ToString();
             byte[] DGram = Encoding.ASCII.GetBytes(msg);
@@ -462,7 +474,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 udpClient.ExclusiveAddressUse = false;
                 udpClient.Client.ReceiveTimeout = 8 * 1000;
                 //Dont do this !
-                udpClient.Connect(LocalIpEndPointLoopback);
+                udpClient.Connect(RemoteUdpEndPoint);
                 udpClient.Send(DGram, DGram.Length);//, LocalIpEndPointLoopback);//, LocalIpEndPointLoopback);
                                                     //udpClient.Send(DGram, DGram.Length, LocalIpEndPointLoopback);//, LocalIpEndPointLoopback);
                 IPEndPoint host = default;
@@ -499,7 +511,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
         //    return jso;
         //}
 
-        public static string SendIpc(IpcEnvelope ipc)
+        public static string SendIpc(IpcEnvelope ipc, IPEndPoint RemoteUdpEndPoint)
         {
             string json = "FAIL to make json";
             try
@@ -507,7 +519,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 //JObject jso = ipc.ToJson();
                 //json = jso.ToString();
                 json = JsonSerializer.Serialize<IpcEnvelope>(ipc);
-                SendJson(json);
+                SendJson(json, RemoteUdpEndPoint);
             }
             catch (Exception e)
             {
@@ -516,14 +528,14 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             return json;
         }
 
-        public static string SendIpcForReply(IpcEnvelope ipc)
+        public static string SendIpcForReply(IpcEnvelope ipc, IPEndPoint RemoteUdpEndPoint)
         {
             try
             {
                 //JObject jso = ipc.ToJson();
                 //    jso.ToString();
                 string json = JsonSerializer.Serialize<IpcEnvelope>(ipc);
-                var rep = SendJsonForReply(json);
+                var rep = SendJsonForReply(json, RemoteUdpEndPoint);
                 return rep;
             }
             catch (Exception e)
@@ -533,16 +545,16 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             return "";
         }
 
-        public static String SendCmdAndAwaitReply(string cmd, string[] args)
+        public static String SendCmdAndAwaitReply(string cmd, string[] args, IPEndPoint RemoteUdpEndPoint)
         {
             IpcEnvelope ipc = IpcEnvelope.MakeCmd(cmd, args);
-            string rep = SendIpcForReply(ipc);
+            string rep = SendIpcForReply(ipc, RemoteUdpEndPoint);
             return rep;
         }
-        public static string SendCmd(string cmd, string[] args)
+        public static string SendCmd(string cmd, string[] args, IPEndPoint RemoteUdpEndPoint)
         {
             IpcEnvelope ipc = IpcEnvelope.MakeCmd(cmd, args);
-            return SendIpc(ipc);
+            return SendIpc(ipc, RemoteUdpEndPoint);
         }
         public static string Cmd2JsonText(string cmd, string[] args)
         {

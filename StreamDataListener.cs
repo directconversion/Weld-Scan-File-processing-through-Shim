@@ -10,13 +10,13 @@ namespace RawImageShimmer
     public static class StreamDataListener
     {
         const string FilePath = "1024_16bit_Output.raw";
-        const string HostInterfaceIP = "127.0.0.1";
+        //const string HostInterfaceIP = "127.0.0.1";
         public const int DetectorDataPortDefault = 45002;
         static byte[] HeaderBuf = new byte[1024];
 
-        public static async Task RunImageDataTcp(string fn, int port, CancellationToken ct = default(CancellationToken))
+        public static async Task RunImageDataTcp(string fn, string TcpHostInterfaceIP, int port, CancellationToken ct = default(CancellationToken))
         {
-            using (TcpClient imageDataTcp = WaitForDetToConnectOnDataPort(port, ct))
+            using (TcpClient imageDataTcp = WaitForDetToConnectOnDataPort(TcpHostInterfaceIP, port, ct))
             {
                 Console.WriteLine("Det Data Connected!");
                 ct.Register(() => imageDataTcp.Close());
@@ -30,12 +30,12 @@ namespace RawImageShimmer
             }
             return;
         }
-        static TcpClient WaitForDetToConnectOnDataPort(int port, CancellationToken ct = default(CancellationToken))
+        static TcpClient WaitForDetToConnectOnDataPort(string TcpHostInterfaceIP,int port, CancellationToken ct = default(CancellationToken))
         {
             TcpListener server = null;
             try
             {
-                server = new TcpListener(IPAddress.Parse(HostInterfaceIP), port);
+                server = new TcpListener(IPAddress.Parse(TcpHostInterfaceIP), port);
                 server.Server.ReceiveTimeout = 50000;
                 //server.ExclusiveAddressUse = false;
                 //server.Server.ExclusiveAddressUse = false;
