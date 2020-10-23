@@ -327,7 +327,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             //fn = "191017124101.raw";
 
             const int UdpIpcPort = 0x4153;
-            const string DetectorIpAddr = "192.168.32.24";
+            const string DetectorIpAddr = "192.168.32.24"; 
 
 
             Console.WriteLine("Hello World!");
