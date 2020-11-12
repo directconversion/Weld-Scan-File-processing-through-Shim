@@ -312,6 +312,29 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             fileListText = @"C:\tmp\Moses20200724\MLS-0002-D_20-07-2020_09.09.08.raw";
             //fileListText = @"C:\tmp\Moses20200724\MLS-0001-D_20-07-2020_08.49.26.raw";
             GainPath = @"C:\tmp\Moses20200724\GainScanFile_19-07-2020_10.24.31.raw";
+            fileListText = @"C:\Test\Thor\Raw\MLS-0002-D_20-07-2020_09.09.08.raw";
+            GainPath = @"C:\Test\Thor\Gain\GainScanFile_19-07-2020_10.24.31.raw";
+            ////////////////////////////////////////////////////////////////////////////////
+            ///
+
+
+            fileListText = @"C:\Test\Thor\Raw\36x500_1111_NewShim.raw";
+            fileListText = @"C:\Test\Thor\Raw\1-AML-0001_11-11-2020_02.31.52.raw";
+            fileListText = @"C:\Test\Thor\Raw\1-AML-0002_11-11-2020_02.47.34.raw";
+           // fileListText = @"C:\Test\Thor\Raw\1-AML-0003_11-11-2020_02.59.46.raw";
+            GainPath = @"C:\Test\Thor\Gain\GainScanFile_11-11-2020_02.20.05.raw";
+
+
+
+
+            const int UdpIpcPort = 0x4153;
+            var ShimIpAddress = IPAddress.Loopback;
+            var ShimExternalIpAddress = "192.168.184.30";
+            var SendDataToShimIpAddressToRemoteConnect = IPAddress.Parse(ShimExternalIpAddress);
+            var ShimUdpIpcIpAddressToRemoteConnect = ShimIpAddress;
+            var RecvDataIpAddressToLocalBind = IPAddress.Loopback;
+            //"192.168.32.24";
+
 
             var fileList = fileListText.Split('\n').Select(sx => sx.Trim()).ToList();
             if (args.Count() >= 2)
@@ -326,22 +349,19 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             //gainFileName = "191017123647.raw";
             //fn = "191017124101.raw";
 
-            const int UdpIpcPort = 0x4153;
-            const string DetectorIpAddr = "192.168.32.24"; 
-
 
             Console.WriteLine("Hello World!");
-            var udpIpcEndPoint = new IPEndPoint(IPAddress.Parse("192.168.32.24"), UdpIpcPort);
+            var ShimUdpIpcEndPoint = new IPEndPoint(ShimUdpIpcIpAddressToRemoteConnect, UdpIpcPort);
             var ipc = IpcEnvelope.MakeCmd("load_raw_gain_file", new string[] { GainPath });
             string sx = JsonSerializer.Serialize<IpcEnvelope>(ipc);
             string ipcString = IpcEnvelope.Cmd2JsonText("load_raw_gain_file", new string[] { GainPath });
 
-            string txt1 = IpcEnvelope.SendCmdAndAwaitReply("set_ip", new string[] { "192.168.32.16" }, udpIpcEndPoint);
-            string txt2 = IpcEnvelope.SendCmdAndAwaitReply("set_client_ip", new string[] { "192.168.32.16" }, udpIpcEndPoint);
-            string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { GainPath }, udpIpcEndPoint);
-            string txt4 = IpcEnvelope.SendJsonForReply(OnlyDeliverJson, udpIpcEndPoint);
-            txt4 = IpcEnvelope.SendJsonForReply(GainOnJson,udpIpcEndPoint);
-            //txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson, udpIpcEndPoint);
+            //string txt1 = IpcEnvelope.SendCmdAndAwaitReply("set_ip", new string[] { "192.168.32.16" }, udpIpcEndPoint);
+            //string txt2 = IpcEnvelope.SendCmdAndAwaitReply("set_client_ip", new string[] { "192.168.32.16" }, udpIpcEndPoint);
+            string txt3 = IpcEnvelope.SendCmdAndAwaitReply("load_raw_gain_file", new string[] { GainPath }, ShimUdpIpcEndPoint);
+            string txt4 = IpcEnvelope.SendJsonForReply(OnlyDeliverJson, ShimUdpIpcEndPoint);
+            //txt4 = IpcEnvelope.SendJsonForReply(GainOnJson, ShimUdpIpcEndPoint);
+            txt4 = IpcEnvelope.SendJsonForReply(TileEdgeCorOnJson, ShimUdpIpcEndPoint);
             //txt4 = IpcEnvelope.SendJsonForReply(BltFilterCorOnJson);
             //Console.WriteLine(txt3);
             //Console.WriteLine(ipcString);
@@ -350,12 +370,12 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
             int y_shift = +0;
             var IpcFocus = FocusShift.Replace(nameof(x_shift), x_shift.ToString(CultureInfo.InvariantCulture))
                 .Replace(nameof(y_shift), y_shift.ToString(CultureInfo.InvariantCulture));
-            string txt5 = IpcEnvelope.SendJsonForReply(IpcFocus, udpIpcEndPoint);
+            string txt5 = IpcEnvelope.SendJsonForReply(IpcFocus, ShimUdpIpcEndPoint);
             Console.WriteLine(txt5);
 
-            Task.Delay(3000).Wait();
+  //          Task.Delay(3000).Wait();
             //     wh.Set();
-            Task.Delay(1000).Wait();
+    //        Task.Delay(1000).Wait();
 
             int nFiles = fileList.Count();
             // nFiles = 2;
@@ -366,8 +386,8 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 string inputPath = fileList[i];
                 string fnBase = Path.GetFileNameWithoutExtension(inputPath);
                 string outputPath = $@"C:/tmp/a{i}.raw";
-                var sf = Task.Run(() => StreamDataListener.RunImageDataTcp($@"C:/tmp/{fnBase}.cor.raw", "192.168.32.16", StreamDataListener.DetectorDataPortDefault));
-                var t = Task.Run(() => ReadFileToShim.CopyRawImageFileToShim(inputPath, DetectorIpAddr));
+                var sf = Task.Run(() => StreamDataListener.RunImageDataTcp($@"C:/tmp/{fnBase}.cor.raw", RecvDataIpAddressToLocalBind, StreamDataListener.DetectorDataPortDefault));
+                var t = Task.Run(() => ReadFileToShim.CopyRawImageFileToShim(inputPath, SendDataToShimIpAddressToRemoteConnect));
                 // @"C:\XCounter\RawImages\1024_16bit_Output.raw");
                 Task.WaitAll(sf, t);
             }

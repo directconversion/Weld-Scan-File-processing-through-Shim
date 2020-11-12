@@ -15,7 +15,7 @@ namespace RawImageShimmer
         const string DetectorDataIpDefault = "192.168.184.92";
         static byte[] HeaderBuf = new byte[1024];
         public static async Task<long> CopyRawImageFileToShim(string FilePath,
-            string DetectorIpAddr = DetectorDataIpDefault,
+            IPAddress ShimDataClientIpAddr,
             int port = TransmitDataHostPortDefault,
             CancellationToken ct = default(CancellationToken))
         {
@@ -25,7 +25,7 @@ namespace RawImageShimmer
                 IPAddress ip = IPAddress.Parse("0.0.0.0");
                 IPEndPoint local = new IPEndPoint(ip, 0);
                 var detClient = new TcpClient(local);
-                await detClient.ConnectAsync(DetectorIpAddr, port);
+                await detClient.ConnectAsync(ShimDataClientIpAddr, port, ct);
                 NetworkStream detDataStream = detClient.GetStream();
                 Console.WriteLine("connected.");
                 using FileStream file = new FileStream(FilePath, FileMode.Open, System.IO.FileAccess.Read);
