@@ -386,7 +386,7 @@ H:\ProjectData\Stanley\wetransfer-3b040c\RTR IMAGES\PROC-0001_20-11-2019_12.46.3
                 string inputPath = fileList[i];
                 string fnBase = Path.GetFileNameWithoutExtension(inputPath);
                 string outputPath = $@"C:/tmp/a{i}.raw";
-                var sf = Task.Run(() => StreamDataListener.RunImageDataTcp($@"C:/tmp/{fnBase}.cor.raw", RecvDataIpAddressToLocalBind, StreamDataListener.DetectorDataPortDefault));
+                var sf = Task.Run(() => StreamDataListener.RunImageDataTcp($@"C:/tmp/{fnBase}.cor.test.raw", RecvDataIpAddressToLocalBind, StreamDataListener.DetectorDataPortDefault));
                 var t = Task.Run(() => ReadFileToShim.CopyRawImageFileToShim(inputPath, SendDataToShimIpAddressToRemoteConnect));
                 // @"C:\XCounter\RawImages\1024_16bit_Output.raw");
                 Task.WaitAll(sf, t);
